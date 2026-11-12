@@ -56,3 +56,5 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin:.7rem
 }
 @media (max-width:520px){.grid4{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+#pr{display:none}
+@media print{body.printing .shell,body.printing .modal,body.printing #toast{display:none!important}body.printing #pr{display:block;padding:1rem;color:#000;background:#fff}body.printing #pr .tbl{font-size:11px}}

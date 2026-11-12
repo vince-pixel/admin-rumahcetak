@@ -45,3 +45,35 @@ Di `assets/data.js` isi `sb:{url:"…",key:"…"}` dengan Project URL dan kunci 
 ## Hal yang perlu diperhatikan
 - Paket gratis Supabase menjeda proyek setelah 7 hari tanpa aktivitas, dan tidak punya backup otomatis. Unduh **Backup** seminggu sekali. Cek ulang kuota dan aturan terbaru di halaman harga Supabase.
 - Data lama di Google Sheets tidak terimpor otomatis. Untuk sedikit pesanan, input ulang lewat panel.
+
+---
+# Tahap 2: Keuangan, Promo & Paket
+
+## Pasang (sekali)
+Di Supabase SQL Editor jalankan berurutan: `sql/schema-tahap2.sql`, lalu `sql/import-tahap2.sql` (mengisi promo, paket bundling, dan aturan harga dari web lama). Unggah panel v2 dan web v10 ke repo masing-masing. Tanpa SQL ini menu Keuangan dan Promo & Paket hanya menampilkan petunjuk.
+
+## Keuangan
+- Pilih rentang: 7 hari, 15 hari, 30 hari, 6 bulan, 1 tahun, per bulan (pilih bulan), atau per tahun (ketik tahun).
+- Omzet dan modal dihitung dari pesanan berstatus **Selesai**, pada tanggal pesanan itu diubah menjadi Selesai. Isi **Harga** dan **Modal** di tiap pesanan, kalau kosong hasilnya Rp 0.
+- Laba kotor = omzet − modal. Laba bersih = laba kotor − biaya operasional. Margin = laba bersih ÷ omzet.
+- Biaya operasional (bahan, listrik, iklan, ongkir, dan sebagainya) dicatat lewat **+ Biaya**.
+- Piutang = harga dikurangi DP untuk pesanan yang belum selesai. Pesanan Selesai dianggap sudah lunas.
+- Unduh: **CSV** (bisa dibuka di Excel), **Excel** (.xlsx, memuat pustaka dari internet saat diklik), dan **PDF / Cetak** (di jendela cetak pilih "Simpan sebagai PDF").
+- Pesanan yang sudah Selesai sebelum Tahap 2 diberi tanggal selesai dari tanggal terakhir diubah, jadi tanggalnya perkiraan.
+
+## Promo & Paket
+- **Bar promo**: nyalakan/matikan, ubah teks, tujuan tombol, dan tanggal mulai/selesai. Di luar tanggal itu bar otomatis hilang. Tebalkan kata dengan **kata**.
+- **Aturan harga undangan fisik**: batas minimal, harga hemat, dan harga biasa. Kalkulator, catatan harga, dan FAQ di web ikut berubah. Tulisan harga di kartu paket diganti otomatis hanya jika angkanya sama dengan harga lama. Cek hasilnya di web.
+- **Paket bundling**: tambah, ubah, hapus, dan atur urutan. Hanya satu paket boleh bertanda rekomendasi.
+- Harga di kartu produk tetap diedit di menu **Produk** (teks bebas).
+- Perubahan tampil di web pada kunjungan berikutnya (halaman dimuat ulang otomatis satu kali).
+
+## Troubleshooting: "Akses ditolak, akun ini bukan admin"
+Jalankan di SQL Editor Supabase, satu per satu:
+1. Pasang aturan baca (wajib; ada di schema.sql terbaru):
+   `create policy admin_self on admins for select using (user_id = auth.uid());`
+   Jika muncul "policy already exists", abaikan.
+2. Cek isi tabel: `select a.user_id, u.email from admins a join auth.users u on u.id = a.user_id;`
+   Jika kosong, akun belum didaftarkan. Cek email yang benar: `select id, email from auth.users;`
+3. Daftarkan (ganti emailnya persis seperti di daftar langkah 2): `insert into admins select id from auth.users where email = 'EMAIL_ANDA' on conflict do nothing;`
+Lalu keluar dan masuk lagi di panel.

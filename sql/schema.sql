@@ -73,6 +73,7 @@ alter table products enable row level security;
 alter table orders enable row level security;
 alter table reviews enable row level security;
 
+create policy admin_self on admins for select using (user_id = auth.uid());
 create policy admin_all_cat on categories for all using (is_admin()) with check (is_admin());
 create policy admin_all_prod on products for all using (is_admin()) with check (is_admin());
 create policy admin_all_ord on orders for all using (is_admin()) with check (is_admin());
@@ -88,7 +89,7 @@ create policy media_upd on storage.objects for update using (bucket_id='media' a
 create policy media_del on storage.objects for delete using (bucket_id='media' and is_admin());
 
 -- Jadikan akun Anda admin (buat akun dulu di Authentication > Users, lalu ganti emailnya):
-insert into admins select id from auth.users where email = 'mughny321@gmail.com';
+-- insert into admins select id from auth.users where email = 'EMAIL_ANDA';
 
 -- Rating & terjual untuk web utama (dihitung dari ulasan tampil dan pesanan selesai)
 create or replace function public_stats() returns json
