@@ -88,7 +88,7 @@ create policy media_upd on storage.objects for update using (bucket_id='media' a
 create policy media_del on storage.objects for delete using (bucket_id='media' and is_admin());
 
 -- Jadikan akun Anda admin (buat akun dulu di Authentication > Users, lalu ganti emailnya):
--- insert into admins select id from auth.users where email = 'EMAIL_ANDA';
+insert into admins select id from auth.users where email = 'mughny321@gmail.com';
 
 -- Rating & terjual untuk web utama (dihitung dari ulasan tampil dan pesanan selesai)
 create or replace function public_stats() returns json
