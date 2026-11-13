@@ -77,3 +77,34 @@ Jalankan di SQL Editor Supabase, satu per satu:
    Jika kosong, akun belum didaftarkan. Cek email yang benar: `select id, email from auth.users;`
 3. Daftarkan (ganti emailnya persis seperti di daftar langkah 2): `insert into admins select id from auth.users where email = 'EMAIL_ANDA' on conflict do nothing;`
 Lalu keluar dan masuk lagi di panel.
+
+---
+# Tahap 3: Seller Center, pembayaran, invoice, label otomatis
+
+## Pasang
+1. Di Supabase SQL Editor jalankan `sql/schema-tahap3.sql` (sekali). File ini membuat tabel pembayaran, mengubah DP lama menjadi catatan pembayaran, membuat penghitung klik, dan memperbarui statistik web. Pastikan `schema.sql` terbaru dan `schema-tahap2.sql` sudah pernah dijalankan.
+2. Unggah panel v3 ke repo panel, dan web v11 ke repo web utama.
+3. **Pesanan Selesai lama kini bisa tampil belum lunas** (dulu otomatis dianggap lunas). Catat pembayarannya di panel, atau pakai skrip opsional di bagian bawah `schema-tahap3.sql` untuk mencatat semuanya lunas sekaligus.
+4. Buka **Pengaturan**: isi data usaha, rekening/e-wallet, dan catatan invoice. Tanpa rekening, invoice menampilkan "Hubungi kami untuk informasi pembayaran".
+
+## Perbaikan penting
+Kolom **Nama produk** dan **Harga paket** sempat tidak tampil sejak Tahap 2 karena id-nya bentrok dengan aturan CSS area cetak. Sudah diperbaiki di v3.
+
+## Pesanan dan produk
+- Produk dipilih dari dropdown katalog (atau "Lainnya" untuk mengetik sendiri). Memilih produk otomatis mengisi jenis pesanan.
+- Label di kartu produk web: label manual (kolom Label di form produk) selalu menang. Jika kosong: **Terlaris** (3 produk dengan pesanan selesai terbanyak), **Populer** (3 produk paling sering diklik 30 hari terakhir, satu perangkat dihitung sekali per hari), **Baru** (30 hari sejak ditambahkan). Angka klik berupa perkiraan karena bisa dipalsukan.
+- Katalog Produk di panel menampilkan Terjual, Klik 30 hari, dan label yang sedang tampil.
+
+## Pembayaran, tagihan, invoice
+- **DP** saat membuat pesanan menjadi pembayaran pertama. Pembayaran lain dicatat lewat tombol **Pembayaran** di form pesanan, atau **Bayar** di Tagihan & Invoice.
+- **Piutang = harga − total pembayaran**, termasuk untuk pesanan Selesai. Tidak ada lagi lunas otomatis.
+- **Tagihan & Invoice** (submenu Pesanan): daftar pesanan belum lunas beserta umur tagihan, dan filter yang sudah selesai atau masih berjalan.
+- **Invoice** berupa PDF berlogo. Caption WhatsApp menyesuaikan kondisi (belum bayar, sudah DP, selesai belum lunas, lunas) dan bisa diedit. Tombol **Bagikan** membuka WhatsApp dengan PDF terlampir di HP; di komputer PDF diunduh lalu WhatsApp dibuka dengan caption terisi, dan PDF dilampirkan manual.
+- Huruf di PDF memakai font standar (serif tebal dan sans), bukan font web.
+- Notifikasi (ikon lonceng): pesanan lewat tenggat atau jatuh tempo 2 hari, selesai tapi belum lunas, dan ulasan menunggu.
+
+## Keuangan
+Ditambah **Kas masuk** (pembayaran yang dicatat di periode itu) dan **Piutang** (semua pesanan yang belum lunas). Grafik menampilkan omzet, laba bersih, dan garis kas masuk. Omzet tetap dihitung dari pesanan Selesai.
+
+## Segera hadir
+Editor Website dan Galeri Portofolio (tahap berikutnya). Perubahan tampilan akan disimpan di Supabase, tanpa token GitHub.
