@@ -108,3 +108,34 @@ Ditambah **Kas masuk** (pembayaran yang dicatat di periode itu) dan **Piutang** 
 
 ## Segera hadir
 Editor Website dan Galeri Portofolio (tahap berikutnya). Perubahan tampilan akan disimpan di Supabase, tanpa token GitHub.
+
+---
+# Tahap 4: Aturan harga, Galeri, Editor Website
+
+Tanpa token GitHub. Semua perubahan disimpan di Supabase, dan web utama membacanya.
+
+## Pasang
+1. Supabase SQL Editor: jalankan `sql/schema-tahap4.sql` (sekali). Opsional: `sql/import-tahap4.sql` untuk mengisi daftar layanan kalkulator dari data.js (tanpa ini panel memakai daftar bawaan yang sama).
+2. Unggah panel v4 ke repo panel dan web v12 ke repo web utama.
+3. Di `assets/data.js` web utama, pastikan `adminOrigins` berisi alamat panel Anda persis (bawaan: `https://admin.rumahcetak.my.id`). Ini yang membuat pratinjau langsung hanya menerima kiriman dari panel Anda.
+
+## Aturan harga (menu Promo & Paket)
+Mengganti bagian "aturan harga undangan fisik". Sekarang mengatur semua layanan di kalkulator web:
+- Undangan fisik: batas minimal hemat, harga hemat, harga biasa (seperti sebelumnya).
+- Daftar layanan: nama, jenis (Undangan fisik bertingkat / Per pcs dengan minimal pesan / Harga tetap), harga, minimal pesan, tanda "Undangan web", urutan, tambah dan hapus.
+- Tambahan undangan web (Rp) untuk kotak centang di kalkulator.
+- Menyimpan juga memperbarui harga di kartu paket jika angkanya sama dengan harga lama. Cek hasilnya di web.
+- Catatan di bawah kalkulator (mis. "Sudah termasuk potong presisi") belum bisa diedit dari panel.
+
+## Galeri Portofolio
+Unggah banyak foto sekaligus (dikompres otomatis), isi keterangan, atur urutan, tampilkan atau sembunyikan, dan hapus. Tampil di halaman Galeri web utama. Foto produk dan galeri dari panel kini tampil benar di semua halaman web (sebelumnya hanya di beranda).
+
+## Editor Website
+- **Warna:** hijau utama, hijau tua, kuning aksen, latar halaman, latar selang-seling, warna teks. Ada tombol preset dan peringatan jika kontras teks kurang terbaca. Tombol "Bawaan" per warna mengembalikan warna awal.
+- **Hero:** lencana, judul, bagian miring, kalimat tebal, deskripsi, teks dua tombol, gambar hero, dan latar (bawaan, warna polos, gradasi, atau gambar dengan lapisan gelap), serta warna teks gelap atau terang.
+- **Bagian beranda:** urutan dan tampil atau sembunyi tiap bagian; lebar halaman; posisi gambar hero di desktop; font judul (3 pilihan).
+- **Profil usaha:** teks "Tentang" dan halaman Galeri (satu paragraf per baris).
+- **Pratinjau langsung** di sebelah form (desktop atau lebar HP). Perubahan terlihat saat Anda mengetik, tanpa menerbitkan.
+- **Simpan draf** menyimpan tanpa tayang. **Terbitkan** menayangkan ke web utama dan mencatat satu versi di **Riwayat versi**; "Pakai di draf" memuat versi lama ke editor, lalu tekan Terbitkan untuk menayangkannya lagi.
+- Pengunjung melihat versi baru pada kunjungan berikutnya (halaman memuat ulang otomatis sekali).
+- Batas: tidak ada CSS/HTML bebas. Urutan bagian mengubah susunan, tetapi warna latar selang-seling mengikuti bungkus tiap bagian, jadi cek hasilnya di pratinjau.
